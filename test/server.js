@@ -7,6 +7,7 @@ var Lab = require('lab');
 var Server = require('../lib/server');
 var Version = require('../lib/plugins/endpoints/version');
 var Mongoose = require('mongoose');
+var Sinon = require('sinon');
 
 var lab = exports.lab = Lab.script();
 var describe = lab.experiment;
@@ -18,24 +19,18 @@ describe('server.js', function(){
     Server.init(function(err, server){
       expect(err).to.be.undefined;
       expect(server).to.be.ok;
-      Mongoose.disconnect(done);
+      server.stop(function(){
+        Mongoose.disconnect(done);
+      });
     });
   });
 
-  it('fails plugin registration', {parallel: false}, function(done){
-    var register = Version.register;
-
-    Version.register = function(server, options, next){
-      return next(new Error('plugin error'));
-    };
-    Version.register.attributes = {
-      name: 'bad version'
-    };
-
+  it('fails plugin registration', function(done){
+    var stub = Sinon.stub(Version, 'register').yields(new Error());
     Server.init(function(err, server){
       expect(err).to.be.ok;
       expect(server).to.be.undefined;
-      Version.register = register;
+      stub.restore();
       Mongoose.disconnect(done);
     });
   });

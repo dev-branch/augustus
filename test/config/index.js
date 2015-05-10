@@ -12,13 +12,7 @@ var expect = Chai.expect;
 var it = lab.test;
 
 describe('index.js', function(){
-  it('standard environment variables set', function(done){
-    var env = Config.get();
-    expect(env.NODE_ENV).to.equal('test');
-    done();
-  });
-
-  it('environment variables erased', {parallel: false}, function(done){
+  it('environment variables erased', function(done){
     var origEnv = process.env;
     process.env = {};
     var env = Config.get();
@@ -27,7 +21,7 @@ describe('index.js', function(){
     done();
   });
 
-  it('set port environment variables', {parallel: false}, function(done){
+  it('set port environment variables', function(done){
     var origEnv = process.env;
     process.env = {};
     process.env.PORT = 3333;

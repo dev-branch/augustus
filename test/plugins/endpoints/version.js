@@ -16,9 +16,12 @@ describe('GET /version', function(){
   it('get app version', function(done){
     Server.init(function(err, server){
       server.inject({method: 'get', url: '/version', headers: {authorization: 'Bearer ' + server.app.environment.FIREBASE_TOKEN}}, function(res){
+        expect(res.result.version).to.equal('0.0.1');
         expect(err).to.not.be.ok;
         expect(res.statusCode).to.equal(200);
-        Mongoose.disconnect(done);
+        server.stop(function(){
+          Mongoose.disconnect(done);
+        });
       });
     });
   });
