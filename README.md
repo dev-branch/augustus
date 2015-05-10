@@ -8,4 +8,4 @@
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dev-branch/augustus?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-[![node](https://img.shields.io/badge/node-0.12.x-blue.svg)]()
+[![node](https://img.shields.io/badge/node-0.12.x-blue.svg)](https://nodejs.org/)
