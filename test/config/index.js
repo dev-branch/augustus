@@ -12,25 +12,28 @@ var expect = Chai.expect;
 var it = lab.test;
 
 describe('index.js', function(){
-  it('no environment variables set', function(done){
+  it('standard environment variables set', function(done){
     var env = Config.get();
     expect(env.NODE_ENV).to.equal('test');
     done();
   });
 
-  it('all environment variables set', {parallel: false}, function(done){
-    delete process.env.NODE_ENV;
-    process.env.PORT = 3333;
-    process.env.FIREBASE_SECRET = 'abc';
-    process.env.FIREBASE_TOKEN = 'def';
-
+  it('environment variables erased', {parallel: false}, function(done){
+    var origEnv = process.env;
+    process.env = {};
     var env = Config.get();
     expect(env.NODE_ENV).to.equal('development');
+    process.env = origEnv;
+    done();
+  });
 
-    process.env.NODE_ENV = 'test';
-    delete process.env.PORT;
-    delete process.env.FIREBASE_SECRET;
-    delete process.env.FIREBASE_TOKEN;
+  it('set port environment variables', {parallel: false}, function(done){
+    var origEnv = process.env;
+    process.env = {};
+    process.env.PORT = 3333;
+    var env = Config.get();
+    expect(env.PORT).to.equal(3333);
+    process.env = origEnv;
     done();
   });
 });
